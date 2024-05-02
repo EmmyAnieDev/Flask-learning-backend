@@ -1,8 +1,7 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_cors import CORS
 
 app = Flask(__name__, static_url_path='/static')
-app.config['SECRET_KEY'] = 'spiritcodes'
 
 # Allow CORS requests from all origins (for development purposes)
 CORS(app)
@@ -48,11 +47,32 @@ def language():
 #----------------------------------    WEB FORMS IN FLASK     ---------------------------------------------------
 from forms import SignUpForm
 
+app.config['SECRET_KEY'] = 'spiritcodes'
 
-@app.route('/signup')
+
+@app.route('/signup', methods = ['GET', 'POST'])
 def sign_up():
     form = SignUpForm()   # initializing the signUpForm class
+    if form.is_submitted():
+        result = request.form
+        return render_template('user.html', result = result)
     return render_template('Signup.html', form=form)
+
+
+#--------------------------------------   HTTP METHODS (GET/POST) & RETRIEVING FORM DATA -------------------------------
+
+@app.route('/login', methods = ['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        result = request.form['nm']     #request.form comes in as a dict, meaning we can access each object with the key.
+        return redirect(url_for('user', username = result ))
+    else:
+        return render_template('login.html')
+
+@app.route('/<username>')
+def user(username):
+    return f'<h1>{username}</h1>'
+
 
 
 if __name__ == '__main__':
