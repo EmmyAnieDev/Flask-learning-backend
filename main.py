@@ -1,10 +1,12 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
+from forms import SignUpForm
 from flask_cors import CORS
+from datetime import timedelta
 
 app = Flask(__name__, static_url_path='/static')
-
-# Allow CORS requests from all origins (for development purposes)
-CORS(app)
+app.config['SECRET_KEY'] = 'spiritcodes' # Secret key for sessions
+app.permanent_session_lifetime = timedelta(seconds=20)  # Setting the session to expire after 5 minutes
+CORS(app)       # Allow CORS requests from all origins (for development purposes)
 
 
 #   --------------------------   LEARNING VIEWS, ROUTE AND VARIABLE RULES    ---------------------------
@@ -45,9 +47,6 @@ def language():
 
 
 # ----------------------------------    WEB FORMS IN FLASK     ---------------------------------------------------
-from forms import SignUpForm
-
-app.config['SECRET_KEY'] = 'spiritcodes'
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -79,15 +78,33 @@ def sign_up():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
+        session.permanent = True # Setting the session to be permanent
         result = request.form['nm']  #request.form comes in as a dict, meaning we can access each object with the key.
-        return redirect(url_for('user', username=result))
+        session['user_profile'] = result # Storing the username in the session, so we can access it later/other pages, stores data in a cookie and as a dictionary
+        flash('login Successful!' , 'info')
+        return redirect(url_for('user'))
     else:
+        if 'user_profile' in session:
+            flash('Already logged in!', 'info')
+            return redirect(url_for('user'))
         return render_template('login.html')
 
 
-@app.route('/username')
-def user(username):
-    return f'<h1>{username}</h1>'
+@app.route('/user')
+def user():
+    if 'user_profile' in session:   # Checking if the user_profile key is in the session
+        username = session['user_profile']
+        return render_template('user_profile.html', user=username) # Rendering the user.html template with the username
+    else:
+        flash('You are not logged in!', 'info')
+        return redirect(url_for('login'))  # Redirecting to the login page if the user_profile key is not in the session
+
+
+@app.route('/logout')
+def logout():
+    flash('You have been logged out!', 'info')
+    session.pop('user_profile', None)  # Remove data when user logout
+    return redirect(url_for('login')) #  Redirect to login page when no sessions and user logout.
 
 
 if __name__ != '__main__':
