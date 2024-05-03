@@ -59,21 +59,36 @@ def sign_up():
     return render_template('Signup.html', form=form)
 
 
-#--------------------------------------   HTTP METHODS (GET/POST) & RETRIEVING FORM DATA -------------------------------
+# #--------------------------------------   HTTP METHODS (GET/POST) & RETRIEVING FORM DATA -------------------------------
+#
+# @app.route('/login', methods = ['POST', 'GET'])
+# def login():
+#     if request.method == 'POST':
+#         result = request.form['nm']     #request.form comes in as a dict, meaning we can access each object with the key.
+#         return redirect(url_for('user', username = result))
+#     else:
+#         return render_template('login.html')
+#
+# @app.route('/<username>')
+# def user(username):
+#     return f'<h1>{username}</h1>'
+
+
+#--------------------------------------   USING SESSIONS FOR LOGINS TO STORE SOME USER DATA -------------------------------
 
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
     if request.method == 'POST':
         result = request.form['nm']     #request.form comes in as a dict, meaning we can access each object with the key.
-        return redirect(url_for('user', username = result ))
+        return redirect(url_for('user', username = result))
     else:
         return render_template('login.html')
 
-@app.route('/<username>')
+@app.route('/username')
 def user(username):
     return f'<h1>{username}</h1>'
 
-
-
-if __name__ == '__main__':
+if __name__ != '__main__':
+    pass
+else:
     app.run(host='0.0.0.0', port=5000)
