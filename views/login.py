@@ -1,14 +1,13 @@
 # --------------------------------------   USING SESSIONS FOR LOGINS TO STORE SOME USER DATA -------------------------------
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-
 from models import UserDetails, db
 
 lg = Blueprint('login', __name__, template_folder='templates', static_folder='static')
 
 
 @lg.route('/login', methods=['POST', 'GET'])
-@lg.route('/', methods = ['POST', 'GET'])
+#@lg.route('/', methods = ['POST', 'GET'])
 def login():
     if request.method == 'POST':
         session.permanent = True  # Setting the session to be permanent
