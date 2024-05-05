@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+
+from flask import Flask, render_template, request
+from models import db
 from forms import SignUpForm
 from flask_cors import CORS
 from datetime import timedelta
-from flask_sqlalchemy import SQLAlchemy
 
 from views.login import lg
 from views.logout import lgt
@@ -10,17 +11,19 @@ from views.users import us
 from views.view_users import vu
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'spiritcodes' # Secret key for sessions
+app.config['SECRET_KEY'] = 'spiritcodes'  # Secret key for sessions
 app.permanent_session_lifetime = timedelta(minutes = 5)  # Setting the session to expire after 5 minutes
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db' # Database URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Disabling the modification tracker to avoid warnings in the console when running the app
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # Database URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disabling the modification tracker to avoid warnings in the console when running the app
 CORS(app)       # Allow CORS requests from all origins (for development purposes)
+db.init_app(app)  # Initialize SQLAlchemy with the Flask app
 
-app.register_blueprint(lg, url_prefix='') # Registering the login blueprint with the app instance to create a login route in the app. url_prefix='/login' is the URL prefix for the login route
+
+app.register_blueprint(lg, url_prefix='/admin')    # Registering the login blueprint with the app instance to create a login route in the app. url_prefix='/login' is the URL prefix for the login route
 app.register_blueprint(us, url_prefix='')
 app.register_blueprint(lgt, url_prefix='')
 app.register_blueprint(vu, url_prefix='')
-db = SQLAlchemy(app) # Initializing the database
+
 
 
 

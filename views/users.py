@@ -11,7 +11,7 @@ def user():
         if request.method == 'POST':             # Checking if the request method is POST and storing the email in the session.
             email = request.form['email']
             session['email'] = email  # Storing the email in the session
-            found_user = UserDetails.query.filter_by(name=username).first() # Querying the database to check if the user exists.
+            found_user = UserDetails.query.filter_by(name=username).first()  # Querying the database to check if the user exists.
             found_user.email = email # Updating the email in the database with the email from the form and committing the changes
             db.session.commit() # Committing the changes to the database any time we make changes to the database
             flash('Email was saved!')
