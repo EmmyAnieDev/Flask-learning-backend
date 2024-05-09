@@ -35,7 +35,7 @@ def handle_500_error(e):
     return "Internal Server Error", 500
 
 
-#   --------------------------   LEARNING VIEWS, ROUTE AND VARIABLE RULES    ---------------------------
+#  --------------------------   LEARNING VIEWS, ROUTE AND VARIABLE RULES    ---------------------------
 # @app.route('/home')
 # def home_page():
 #     return jsonify({'message': 'home page'})
@@ -48,14 +48,14 @@ def handle_500_error(e):
 # def signup_page():
 #     return jsonify({'message': 'signup here'})
 #
-# @app.route('/user', methods = ['POST'])
-# def show_user_profile():
-#     return f'User profile for emmy'
-
-# @app.route('/user/<username>')
-# def show_user_profile(username):
+# # @app.route('/user', methods = ['POST'])
+# # def show_user_profile():
+# #     return f'User profile for emmy'
+#
+# @app.route('/user/<user>')
+# def show_user_profile(user):
 #     # This view function will receive the username from the URL
-#     return f'User profile for {username}'
+#     return f'User profile for {user}'
 
 
 # --------------------------------   TEMPLATES WITH JINJA 2    ------------------------------------------------
