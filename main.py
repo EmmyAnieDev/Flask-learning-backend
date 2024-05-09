@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from models import db
 from forms import SignUpForm
 from flask_cors import CORS
@@ -24,7 +24,15 @@ app.register_blueprint(us, url_prefix='/person')
 app.register_blueprint(lgt, url_prefix='/down')
 app.register_blueprint(vu, url_prefix='/people')
 
+# Custom error handler for 404 Not Found
+@app.errorhandler(404)
+def not_found_error(error):
+    return 'error: Page does not exist', 404
 
+@app.errorhandler(500)
+def handle_500_error(e):
+    app.logger.error('Server Error: %s', (e))
+    return "Internal Server Error", 500
 
 
 #   --------------------------   LEARNING VIEWS, ROUTE AND VARIABLE RULES    ---------------------------
